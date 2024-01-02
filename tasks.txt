@@ -7,3 +7,4 @@ eat 0
 sleep 0
 co 0
 play 1
+helo 0
