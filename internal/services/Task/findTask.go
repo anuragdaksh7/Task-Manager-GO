@@ -10,10 +10,12 @@ import (
 )
 
 func FindTasks(client *mongo.Client, email string) ([]models.Task, error) {
-	filter := bson.M{"email": email}
+	filter := bson.M{
+		//"email": email
+	}
 	var results []models.Task
 
-	cursor, err := client.Database("ticket").Collection("tasks").Find(context.Background(), filter)
+	cursor, err := client.Database("taskit").Collection("tasks").Find(context.Background(), filter)
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
 			return nil, nil
@@ -28,6 +30,7 @@ func FindTasks(client *mongo.Client, email string) ([]models.Task, error) {
 			fmt.Println("Error decoding document:", err)
 			continue
 		}
+		fmt.Println(task)
 
 		results = append(results, task)
 	}
