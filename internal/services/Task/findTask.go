@@ -9,9 +9,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func FindTasks(client *mongo.Client, email string) ([]models.Task, error) {
+func FindTasks(client *mongo.Client, clerkId string) ([]models.Task, error) {
 	filter := bson.M{
-		//"email": email
+		"clerk_id": clerkId,
 	}
 	var results []models.Task
 

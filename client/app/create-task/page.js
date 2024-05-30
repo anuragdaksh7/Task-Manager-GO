@@ -71,13 +71,13 @@ export default function Page() {
 
   useEffect(() => {
     fetchTasks();
-  });
+  },[]);
   return (
-    <div className="flex justify-center mt-32">
+    <div className="flex justify-center mt-32 text-black">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className=" flex flex-col gap-4 border-2 px-6 py-4 rounded-md bg-white shadow-md"
+          className=" flex flex-col gap-4 border-2 px-6 py-4 rounded-md bg-white shadow-white shadow-sm"
         >
           <h1 className="text-xl  font-semibold">Create New Task</h1>
           <div className="flex gap-4">

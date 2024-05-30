@@ -17,11 +17,11 @@ func FindTaskByEmailController(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	email := r.Form.Get("email")
+	clerkId := r.Form.Get("userId")
 
 	var tasks []models.Task
 
-	tasks, err = Task.FindTasks(connection, email)
+	tasks, err = Task.FindTasks(connection, clerkId)
 	if err != nil {
 		fmt.Fprintf(w, fmt.Sprintf("%v", err))
 		return

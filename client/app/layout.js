@@ -13,7 +13,7 @@ export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className="font-mono">
+        <body className="font-mono bg-black text-white">
           <Navbar />
           <SpeedInsights />
           {children}

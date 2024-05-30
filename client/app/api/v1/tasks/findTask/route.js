@@ -13,16 +13,16 @@ export async function POST(request) {
       });
 
     await connectDB();
-    // const { userId } = auth();
-    // if (!userId) {
-    //     return Response.json({
-    //         message: "User not found. Please authenticate and try again",
-    //         error: "User not found",
-    //     });
-    // }
+    const { userId } = auth();
+    if (!userId) {
+        return Response.json({
+            message: "User not found. Please authenticate and try again",
+            error: "User not found",
+        });
+    }
 
     const dbResponse = await axios.post("http://localhost:8080/get-task", {
-      userId: "123",
+      userId: userId,
     });
     const dbData = await dbResponse.data;
     return Response.json({
