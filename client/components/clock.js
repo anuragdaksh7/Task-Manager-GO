@@ -22,7 +22,7 @@ export default function Clock() {
         ":" +
         ("" + time.getSeconds()).padStart(2, "0"),
     );
-  });
+  }, [time]);
 
   return (
     <div>

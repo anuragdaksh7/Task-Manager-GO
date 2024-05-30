@@ -43,32 +43,37 @@ import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
 import { MdOutlineCheckBox } from "react-icons/md";
 import { useToast } from "@/components/ui/use-toast";
 
-
-
-
 export default function Page() {
-
-  const [selected, setSelected] = useState([])
+  const [selected, setSelected] = useState([]);
   function TaskCard(props) {
-    const [taskSelected, setTaskSelected] = useState(selected.includes(props._id))
+    const [taskSelected, setTaskSelected] = useState(
+      selected.includes(props._id),
+    );
     return (
-      <div onClick={() => {
-        if (taskSelected) {
-          selected.splice(selected.indexOf(props._id), 1)
-          setTaskSelected(false)
-        } else {
-          // setSelected([...selected,props._id])
-          selected.push(props._id);
-          setTaskSelected(true)
-        }
-        console.log(selected)
-      }} className=" cursor-pointer flex gap-2 items-center hover:bg-gray-200 duration-200 rounded-md px-2 py-1">
-        {(taskSelected) ? <MdOutlineCheckBox /> : <MdOutlineCheckBoxOutlineBlank />}
+      <div
+        onClick={() => {
+          if (taskSelected) {
+            selected.splice(selected.indexOf(props._id), 1);
+            setTaskSelected(false);
+          } else {
+            // setSelected([...selected,props._id])
+            selected.push(props._id);
+            setTaskSelected(true);
+          }
+          console.log(selected);
+        }}
+        className=" cursor-pointer flex gap-2 items-center hover:bg-gray-200 duration-200 rounded-md px-2 py-1"
+      >
+        {taskSelected ? (
+          <MdOutlineCheckBox />
+        ) : (
+          <MdOutlineCheckBoxOutlineBlank />
+        )}
         <p>{props.title}</p>
       </div>
-    )
+    );
   }
-  const [tasks, setTasks] = useState([])
+  const [tasks, setTasks] = useState([]);
 
   const fetchTasks = async () => {
     const response = await axios.post("/api/v1/tasks/findTask", {
@@ -78,9 +83,9 @@ export default function Page() {
     // console.log(data.data);
     setTasks(data.data);
   };
-  const { toast } = useToast()
+  const { toast } = useToast();
   const [priority, setPriority] = useState("Low");
-  const [category, setCategory] = useState("Personal");
+  const [category, setCategory] = useState("personal");
   const form = useForm({
     resolver: zodResolver(createTaskSchema),
     defaultValues: {
@@ -100,12 +105,12 @@ export default function Page() {
     values.category = category;
     const response = await axios.post("/api/v1/tasks/createTask", values);
     const data = await response?.data;
-    console.log(data)
+    console.log(data);
     if (data.message === "Task created successfully") {
       toast({
         title: "Task created successfully",
         description: values.title,
-      })
+      });
     }
     // console.log(values);
   }
@@ -246,7 +251,8 @@ export default function Page() {
                 name="category"
                 render={({ field }) => (
                   <FormItem className="">
-                    <FormLabel>Category</FormLabel><br />
+                    <FormLabel>Category</FormLabel>
+                    <br />
                     <FormControl>
                       <DropdownMenu>
                         <DropdownMenuTrigger className="w-full">
@@ -264,19 +270,13 @@ export default function Page() {
                             className="flex flex-col gap-1"
                             onValueChange={setCategory}
                           >
-                            <DropdownMenuRadioItem
-                              value="work"
-                            >
+                            <DropdownMenuRadioItem value="work">
                               Work
                             </DropdownMenuRadioItem>
-                            <DropdownMenuRadioItem
-                              value="personal"
-                            >
+                            <DropdownMenuRadioItem value="personal">
                               Personal
                             </DropdownMenuRadioItem>
-                            <DropdownMenuRadioItem
-                              value="errands"
-                            >
+                            <DropdownMenuRadioItem value="errands">
                               Errands
                             </DropdownMenuRadioItem>
                           </DropdownMenuRadioGroup>
@@ -298,18 +298,26 @@ export default function Page() {
                     <FormControl>
                       <Popover>
                         <PopoverTrigger className="w-full">
-                          <Input className="w-full cursor-pointer" readOnly placeholder={`Dependencies`} />
+                          <Input
+                            className="w-full cursor-pointer"
+                            readOnly
+                            placeholder={`Dependencies`}
+                          />
                         </PopoverTrigger>
                         <PopoverContent>
                           <div>
-                            <p className="text-sm">Select relevent dependencies.</p>
-                            {
-                              tasks.map((task, index) => {
-                                return (
-                                  <TaskCard key={index} _id={task._id} title={task.title} />
-                                )
-                              })
-                            }
+                            <p className="text-sm">
+                              Select relevent dependencies.
+                            </p>
+                            {tasks.map((task, index) => {
+                              return (
+                                <TaskCard
+                                  key={index}
+                                  _id={task._id}
+                                  title={task.title}
+                                />
+                              );
+                            })}
                           </div>
                         </PopoverContent>
                       </Popover>

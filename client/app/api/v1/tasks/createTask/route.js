@@ -4,13 +4,12 @@ import { auth } from "@clerk/nextjs/server";
 // db models
 import connectDB from "@/database/connect/connect";
 import { TASK } from "@/database/model/task.model";
-import { USER } from "@/database/model/user.model"
+import { USER } from "@/database/model/user.model";
 export async function POST(request) {
   try {
-
     const data = await request.json();
     // if no data bad response
-    console.log(data)
+    console.log(data);
     if (!data)
       return Response.json({
         message: "No data provided",
@@ -28,11 +27,11 @@ export async function POST(request) {
 
     const user = await USER.findOne({ clerk_id: userId });
 
-    if (!user){
+    if (!user) {
       return Response.json({
         message: "User not found. Please authenticate and try again",
         error: "User not found",
-      })
+      });
     }
 
     const newEvent = new TASK({
