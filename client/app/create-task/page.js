@@ -39,16 +39,47 @@ import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import axios from "axios";
 
+import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
+import { MdOutlineCheckBox } from "react-icons/md";
+
+
+
+
 export default function Page() {
+
+  const [selected, setSelected] = useState([])
+  function TaskCard(props) {
+    const [taskSelected, setTaskSelected] = useState(selected.includes(props._id))
+    return (
+      <div onClick={() => {
+        if (taskSelected) {
+          selected.splice(selected.indexOf(props._id), 1)
+          setTaskSelected(false)
+        } else {
+          // setSelected([...selected,props._id])
+          selected.push(props._id);
+          setTaskSelected(true)
+        }
+        console.log(selected)
+      }} className=" cursor-pointer flex gap-2 items-center hover:bg-gray-200 duration-200 rounded-md px-2 py-1">
+        {(taskSelected) ? <MdOutlineCheckBox /> : <MdOutlineCheckBoxOutlineBlank />}
+        <p>{props.title}</p>
+      </div>
+    )
+  }
+  const [tasks, setTasks] = useState([])
+
   const fetchTasks = async () => {
     const response = await axios.post("/api/v1/tasks/findTask", {
       email: "anurag@g.g",
     });
     const data = await response.data;
-    console.log(data);
+    // console.log(data.data);
+    setTasks(data.data);
   };
 
   const [priority, setPriority] = useState("Low");
+  const [category, setCategory] = useState("Personal");
   const form = useForm({
     resolver: zodResolver(createTaskSchema),
     defaultValues: {
@@ -56,7 +87,7 @@ export default function Page() {
       dueDate: "",
       description: "",
       priority: priority,
-      category: "",
+      category: category,
       dependencies: "",
       labels: "",
     },
@@ -64,14 +95,16 @@ export default function Page() {
 
   async function onSubmit(values) {
     values.priority = priority;
+    values.dependencies = selected;
+    values.category = category;
     const response = axios.post("/api/v1/tasks/createTask", values);
     const data = await response?.data;
-    console.log(values, data);
+    console.log(values);
   }
 
   useEffect(() => {
     fetchTasks();
-  },[]);
+  }, []);
   return (
     <div className="flex justify-center mt-32 text-black">
       <Form {...form}>
@@ -147,19 +180,6 @@ export default function Page() {
                     </FormItem>
                   )}
                 />
-                {/*<FormField*/}
-                {/*    control={form.control}*/}
-                {/*    name="dueDate"*/}
-                {/*    render={({field}) => (*/}
-                {/*        <FormItem>*/}
-                {/*            <FormLabel>DueDate</FormLabel>*/}
-                {/*            <FormControl>*/}
-                {/*                <Input placeholder={`dueDate`} {...field} />*/}
-                {/*            </FormControl>*/}
-                {/*            <FormMessage/>*/}
-                {/*        </FormItem>*/}
-                {/*    )}*/}
-                {/*/>*/}
                 <FormField
                   control={form.control}
                   name="priority"
@@ -217,10 +237,44 @@ export default function Page() {
                 control={form.control}
                 name="category"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Category</FormLabel>
+                  <FormItem className="">
+                    <FormLabel>Category</FormLabel><br />
                     <FormControl>
-                      <Input placeholder={`Category`} {...field} />
+                      <DropdownMenu>
+                        <DropdownMenuTrigger className="w-full">
+                          <Input
+                            {...field}
+                            value={category}
+                            className="cursor-pointer w-full"
+                            readOnly
+                            placeholder={`Set Category`}
+                          />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          <DropdownMenuRadioGroup
+                            value={category}
+                            className="flex flex-col gap-1"
+                            onValueChange={setCategory}
+                          >
+                            <DropdownMenuRadioItem
+                              value="work"
+                            >
+                              Work
+                            </DropdownMenuRadioItem>
+                            <DropdownMenuRadioItem
+                              value="personal"
+                            >
+                              Personal
+                            </DropdownMenuRadioItem>
+                            <DropdownMenuRadioItem
+                              value="errands"
+                            >
+                              Errands
+                            </DropdownMenuRadioItem>
+                          </DropdownMenuRadioGroup>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                      {/*<Input placeholder={`Priority`} {...field} />*/}
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -232,8 +286,25 @@ export default function Page() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Dependencies</FormLabel>
+                    <br />
                     <FormControl>
-                      <Input placeholder={`Dependencies`} {...field} />
+                      <Popover>
+                        <PopoverTrigger className="w-full">
+                          <Input className="w-full cursor-pointer" readOnly placeholder={`Dependencies`} />
+                        </PopoverTrigger>
+                        <PopoverContent>
+                          <div>
+                            <p className="text-sm">Select relevent dependencies.</p>
+                            {
+                              tasks.map((task, index) => {
+                                return (
+                                  <TaskCard key={index} _id={task._id} title={task.title} />
+                                )
+                              })
+                            }
+                          </div>
+                        </PopoverContent>
+                      </Popover>
                     </FormControl>
                     <FormMessage />
                   </FormItem>

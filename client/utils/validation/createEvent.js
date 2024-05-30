@@ -13,7 +13,7 @@ const createTaskSchema = z.object({
     .min(1, "Description is required")
     .max(100, "Description is too long"), // 2 line length
   priority: z.enum(["High", "Medium", "Low"]).optional(), // Optional field
-  category: z.string().trim().min(1, "Category is required"),
+  category: z.string().trim(),
   dependencies: z.string().trim().optional(), // Optional field
   labels: z.string().trim(), // Array of strings for labels
 });

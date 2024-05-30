@@ -42,7 +42,7 @@ export async function POST(request) {
       priority: data.priority,
       category: data.category,
       createdBy: user._id,
-      // dependencies: data?.dependencies,
+      dependencies: data?.dependencies,
       labels: [data?.labels],
     });
     await newEvent.save();
