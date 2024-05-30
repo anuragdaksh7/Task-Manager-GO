@@ -1,6 +1,8 @@
 import connectDB from "@/database/connect/connect";
 import { auth } from "@clerk/nextjs/server";
 import axios from "axios";
+import {USER} from "@/database/model/user.model";
+import {TASK} from "@/database/model/task.model";
 
 export async function POST(request) {
   try {
@@ -21,14 +23,13 @@ export async function POST(request) {
         });
     }
 
-    const dbResponse = await axios.post("http://localhost:8080/get-task", {
-      userId: userId,
-    });
-    const dbData = await dbResponse.data;
+    const user = await USER.findOne({ clerk_id: userId });
+    const tasks = await TASK.find({createdBy: user._id});
+
     return Response.json({
       msg: "Successfully fetched the event",
       error: "",
-      data: dbData,
+      data: tasks,
     });
   } catch (e) {
     return Response.json({

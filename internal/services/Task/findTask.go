@@ -9,12 +9,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func FindTasks(client *mongo.Client, clerkId string) ([]models.Task, error) {
+func FindTasks(client *mongo.Client, userId string) ([]models.Task, error) {
 	filter := bson.M{
-		"clerk_id": clerkId,
+		"createdBy": userId,
 	}
 	var results []models.Task
-
 	cursor, err := client.Database("taskit").Collection("tasks").Find(context.Background(), filter)
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {

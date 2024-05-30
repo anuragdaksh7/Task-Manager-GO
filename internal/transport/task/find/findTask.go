@@ -11,17 +11,24 @@ import (
 
 func FindTaskByEmailController(w http.ResponseWriter, r *http.Request) {
 	connection := db.Connect()
-	err := r.ParseForm()
-	if err != nil {
-		fmt.Fprintf(w, fmt.Sprintf("%v", err))
-		return
+	//err := r.ParseForm()
+	//if err != nil {
+	//	fmt.Fprintf(w, fmt.Sprintf("%v", err))
+	//	return
+	//}
+	//
+	//userId := r.Form.Get("userId")
+	//fmt.Println(userId)
+	decoder := json.NewDecoder(r.Body)
+	//fmt.Println(decoder)
+	var requestBody struct {
+		UserId string `json:"userId"` // Expect email in request body
 	}
-
-	clerkId := r.Form.Get("userId")
-
+	err := decoder.Decode(&requestBody)
+	fmt.Println(requestBody.UserId)
 	var tasks []models.Task
 
-	tasks, err = Task.FindTasks(connection, clerkId)
+	tasks, err = Task.FindTasks(connection, requestBody.UserId)
 	if err != nil {
 		fmt.Fprintf(w, fmt.Sprintf("%v", err))
 		return
