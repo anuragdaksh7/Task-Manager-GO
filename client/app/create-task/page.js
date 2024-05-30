@@ -41,6 +41,7 @@ import axios from "axios";
 
 import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
 import { MdOutlineCheckBox } from "react-icons/md";
+import { useToast } from "@/components/ui/use-toast";
 
 
 
@@ -77,7 +78,7 @@ export default function Page() {
     // console.log(data.data);
     setTasks(data.data);
   };
-
+  const { toast } = useToast()
   const [priority, setPriority] = useState("Low");
   const [category, setCategory] = useState("Personal");
   const form = useForm({
@@ -97,9 +98,16 @@ export default function Page() {
     values.priority = priority;
     values.dependencies = selected;
     values.category = category;
-    const response = axios.post("/api/v1/tasks/createTask", values);
+    const response = await axios.post("/api/v1/tasks/createTask", values);
     const data = await response?.data;
-    console.log(values);
+    console.log(data)
+    if (data.message === "Task created successfully") {
+      toast({
+        title: "Task created successfully",
+        description: values.title,
+      })
+    }
+    // console.log(values);
   }
 
   useEffect(() => {

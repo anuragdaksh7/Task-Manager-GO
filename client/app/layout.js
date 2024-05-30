@@ -2,6 +2,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Navbar from "@/components/Navbar";
+import { Toaster } from "@/components/ui/toaster"
 
 export const metadata = {
   title: "Task Manager App",
@@ -16,6 +17,7 @@ export default function RootLayout({ children }) {
         <body className="font-mono bg-black text-white">
           <Navbar />
           <SpeedInsights />
+          <Toaster />
           {children}
         </body>
       </html>
