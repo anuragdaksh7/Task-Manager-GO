@@ -44,6 +44,7 @@ import { MdOutlineCheckBox } from "react-icons/md";
 import { useToast } from "@/components/ui/use-toast";
 
 export default function Page() {
+  const [dueDate, setDueDate] = useState(new Date())
   const [selected, setSelected] = useState([]);
   function TaskCard(props) {
     const [taskSelected, setTaskSelected] = useState(
@@ -90,7 +91,7 @@ export default function Page() {
     resolver: zodResolver(createTaskSchema),
     defaultValues: {
       title: "",
-      dueDate: "",
+      dueDate: dueDate,
       description: "",
       priority: priority,
       category: category,
@@ -112,7 +113,7 @@ export default function Page() {
         description: values.title,
       });
     }
-    // console.log(values);
+    console.log(values);
   }
 
   useEffect(() => {
@@ -298,7 +299,9 @@ export default function Page() {
                     <FormControl>
                       <Popover>
                         <PopoverTrigger className="w-full">
-                          <Input
+                          <Input onClick={()=>{
+                            console.log(form.getValues("dueDate"))
+                          }}
                             className="w-full cursor-pointer"
                             readOnly
                             placeholder={`Dependencies`}

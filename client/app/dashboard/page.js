@@ -15,14 +15,14 @@ export default function Page() {
         <p className="text-2xl font-bold">Dashboard</p>
       </div>
 
-      <div className="bg-[#333] w-fit px-2 py-1 flex rounded-md gap-1">
+      <div className="bg-[#333] w-fit px-1 py-1 flex rounded-md gap-1">
         {pageFilterArr.map((item, index) => {
           return (
             <button
               key={index}
               className={
                 "px-2 py-[2px] rounded-md " +
-                (page === index ? "bg-black text-white" : " text-gray-400")
+                (page === index ? "bg-black text-white" : " hover:bg-black duration-200 text-gray-400")
               }
               onClick={() => setPage(index)}
             >

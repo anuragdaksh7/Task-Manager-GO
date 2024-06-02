@@ -5,7 +5,7 @@ import Navbar from "@/components/Navbar";
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata = {
-  title: "TaskIt",
+  title: "TaskIt - Simplify Handeling Tasks",
   description:
     "Boost your productivity with our AI capable task manager. Built with Go and NextJS for speed and deployed on Vercel for reliability. Take control of your tasks today!",
 };
